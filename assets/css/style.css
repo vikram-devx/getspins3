@@ -1808,7 +1808,7 @@ body .navbar + .full-width-container {
 }
 
 /* Dashboard Promo Slider */
-.dashboard-promo-slider {
+.dashboard-promo-container {
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -1816,31 +1816,35 @@ body .navbar + .full-width-container {
     max-width: 100%;
 }
 
-.dashboard-slider-wrapper {
-    position: relative;
+.dashboard-slides {
     width: 100%;
+    position: relative;
     overflow: hidden;
     margin: 0;
     padding: 0;
 }
 
-.dashboard-slider {
+.dashboard-slide {
     display: flex;
-    flex-wrap: nowrap;
-    overflow: hidden; /* Hide overflow to show only one slide */
+    flex-direction: column;
+    justify-content: flex-start;
     width: 100%;
-    position: relative;
-    transition: transform 0.5s ease-in-out; /* Add transition for smooth slide movement */
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
     padding: 0;
     box-sizing: border-box;
-    transform: translateZ(0); /* Force hardware acceleration for smooth transitions */
-    -webkit-transform-style: flat; /* Simpler rendering for webkit */
-    transform-style: flat; /* Simpler rendering style */
-    will-change: transform; /* Optimization hint for browsers */
+}
+
+.dashboard-slide.active {
+    opacity: 1;
+    z-index: 2;
 }
 
 /* Make sure slider takes up full width */
-.dashboard-promo-slider {
+.dashboard-promo-container {
     width: 100%;
     position: relative;
     overflow: hidden; /* Ensure overflowing slides are hidden */
@@ -1849,16 +1853,36 @@ body .navbar + .full-width-container {
 }
 
 /* Remove any padding from the slider card body */
-.card-body.p-0 .dashboard-promo-slider,
-.card-body.p-0 .dashboard-slider-wrapper,
-.card-body.p-0 .dashboard-slider {
+.card-body.p-0 .dashboard-promo-container,
+.card-body.p-0 .dashboard-slides {
     padding: 0 !important;
     margin: 0 !important;
 }
 
-/* Hide any existing arrow navigation */
-.dashboard-slider-arrows {
-    display: none !important;
+/* Slider Controls */
+.dashboard-slider-controls {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.dashboard-slider-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dashboard-slider-dot.active {
+    background-color: white;
+    transform: scale(1.2);
 }
 
 /* Fix for slides not showing up */

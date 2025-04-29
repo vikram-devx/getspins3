@@ -152,7 +152,7 @@ include 'includes/header.php';
                         </div>
                     </div>
                     
-                    <!-- Promo Slider -->
+                    <!-- Dashboard Promo Slider -->
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="card">
@@ -160,11 +160,11 @@ include 'includes/header.php';
                                     <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Featured Promotions</h5>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div class="promo-slider-container w-100">
-                                        <!-- Promo Slides -->
-                                        <div class="promo-slides w-100">
+                                    <div class="dashboard-promo-container w-100">
+                                        <!-- Dashboard Promo Slides -->
+                                        <div class="dashboard-slides w-100">
                                             <!-- Slide 1 - Monopoly Go (Blue) -->
-                                            <div class="promo-slide text-white" id="slide-0" style="background-color: #0d6efd; padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;">
+                                            <div class="dashboard-slide text-white" id="dash-slide-0" style="background-color: #0d6efd; padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;">
                                                 <div class="d-flex align-items-center mb-2">
                                                     <i class="fas fa-dice me-3 fa-2x"></i>
                                                     <h4 class="mb-0">Exchange Points for Monopoly Go Spins</h4>
@@ -176,7 +176,7 @@ include 'includes/header.php';
                                             </div>
                                             
                                             <!-- Slide 2 - Coin Master (Green) -->
-                                            <div class="promo-slide text-white" id="slide-1" style="background-color: #198754; padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;">
+                                            <div class="dashboard-slide text-white" id="dash-slide-1" style="background-color: #198754; padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;">
                                                 <div class="d-flex align-items-center mb-2">
                                                     <i class="fas fa-coins me-3 fa-2x"></i>
                                                     <h4 class="mb-0">Exchange Points for Coin Master Spins</h4>
@@ -188,7 +188,7 @@ include 'includes/header.php';
                                             </div>
                                             
                                             <!-- Slide 3 - Referrals (Yellow) -->
-                                            <div class="promo-slide text-dark" id="slide-2" style="background-color: #ffc107; padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;">
+                                            <div class="dashboard-slide text-dark" id="dash-slide-2" style="background-color: #ffc107; padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;">
                                                 <div class="d-flex align-items-center mb-2">
                                                     <i class="fas fa-user-friends me-3 fa-2x"></i>
                                                     <h4 class="mb-0">Refer Friends & Earn 100 Spins</h4>
@@ -200,7 +200,7 @@ include 'includes/header.php';
                                             </div>
                                             
                                             <!-- Slide 4 - Tasks (Red) -->
-                                            <div class="promo-slide text-white" id="slide-3" style="background-color: #dc3545; padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;">
+                                            <div class="dashboard-slide text-white" id="dash-slide-3" style="background-color: #dc3545; padding: 2rem; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;">
                                                 <div class="d-flex align-items-center mb-2">
                                                     <i class="fas fa-tasks me-3 fa-2x"></i>
                                                     <h4 class="mb-0">Complete Tasks, Earn Free Spins</h4>
@@ -213,11 +213,11 @@ include 'includes/header.php';
                                         </div>
                                         
                                         <!-- Slider Controls -->
-                                        <div class="promo-slider-controls">
-                                            <span class="promo-slider-dot active" data-slide="0"></span>
-                                            <span class="promo-slider-dot" data-slide="1"></span>
-                                            <span class="promo-slider-dot" data-slide="2"></span>
-                                            <span class="promo-slider-dot" data-slide="3"></span>
+                                        <div class="dashboard-slider-controls">
+                                            <span class="dashboard-slider-dot active" data-slide="0"></span>
+                                            <span class="dashboard-slider-dot" data-slide="1"></span>
+                                            <span class="dashboard-slider-dot" data-slide="2"></span>
+                                            <span class="dashboard-slider-dot" data-slide="3"></span>
                                         </div>
                                     </div>
                                 </div>
