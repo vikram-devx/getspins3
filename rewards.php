@@ -7,7 +7,7 @@ $auth = new Auth();
 
 // Check if user is logged in
 if (!$auth->isLoggedIn()) {
-    header('Location: login.php');
+    header('Location: /login.php');
     exit;
 }
 

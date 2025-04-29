@@ -7,7 +7,7 @@ $auth = new Auth();
 
 // Check if user is logged in
 if (!$auth->isLoggedIn()) {
-    header('Location: login.php');
+    header('Location: /login.php');
     exit;
 }
 
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 } else {
     // Redirect to rewards page if no reward_id is provided
-    header('Location: rewards.php');
+    header('Location: /rewards.php');
     exit;
 }
 
@@ -131,7 +131,7 @@ include 'includes/header.php';
                 <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     // Get admin email from settings
-                    fetch('includes/ajax_handlers.php?action=get_admin_email')
+                    fetch('/includes/ajax_handlers.php?action=get_admin_email')
                     .then(response => response.json())
                     .then(data => {
                         if (data.success && data.email) {
@@ -272,8 +272,8 @@ include 'includes/header.php';
                 </script>
                 
                 <div class="d-grid gap-2 col-lg-6 mx-auto">
-                    <a href="rewards.php" class="btn btn-primary">Back to Rewards</a>
-                    <a href="dashboard.php?tab=redemptions" class="btn btn-outline-secondary">View Redemption History</a>
+                    <a href="/rewards.php" class="btn btn-primary">Back to Rewards</a>
+                    <a href="/dashboard.php?tab=redemptions" class="btn btn-outline-secondary">View Redemption History</a>
                 </div>
             </div>
         </div>
