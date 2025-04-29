@@ -573,7 +573,8 @@ $(document).ready(function() {
         $('#rewardModalLabel').text(rewardName);
         $('#rewardDescription').text(rewardDescription);
         $('#rewardPoints').text(rewardPoints + ' points');
-        $('#redeemForm').attr('action', 'redeem.php');
+        // Make sure we use the correct path regardless of environment
+        $('#redeemForm').attr('action', '/redeem.php');
         // Set the reward_id as a hidden input field instead of in the URL
         // This ensures compatibility with both URL formats
         $('#redeemForm input[name="reward_id"]').val(rewardId);
