@@ -84,6 +84,8 @@ if ($current_page_name === 'dashboard') {
     $body_class = 'tasks-page';
 } elseif ($current_page_name === 'rewards') {
     $body_class = 'rewards-page';
+} elseif ($current_page_name === 'redeem') {
+    $body_class = 'rewards-page redeem-page'; // Use rewards-page class for consistent styling
 } elseif ($current_page_name === 'referrals') {
     $body_class = 'referrals-page';
 } elseif ($current_page_name === 'leaderboard') {

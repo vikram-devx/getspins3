@@ -9,7 +9,7 @@
                 <i class="fas fa-tasks"></i>
                 <span>Tasks</span>
             </a>
-            <a href="/rewards" class="nav-item <?php echo basename($_SERVER['PHP_SELF']) == 'rewards.php' ? 'active' : ''; ?>">
+            <a href="/rewards" class="nav-item <?php echo (basename($_SERVER['PHP_SELF']) == 'rewards.php' || basename($_SERVER['PHP_SELF']) == 'redeem.php') ? 'active' : ''; ?>">
                 <i class="fas fa-gift"></i>
                 <span>Rewards</span>
             </a>
