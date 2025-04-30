@@ -280,6 +280,38 @@ body .navbar + .full-width-container {
     text-transform: uppercase;
 }
 
+/* Task details modal content scrolling */
+.task-details-container {
+    max-height: 75vh; /* Limit height to 75% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling when needed */
+    padding-right: 5px; /* Add some padding for the scrollbar */
+}
+
+/* Custom scrollbar for task details */
+.task-details-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.task-details-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.task-details-container::-webkit-scrollbar-thumb {
+    background-color: #d0d0d0;
+    border-radius: 10px;
+}
+
+.task-details-container::-webkit-scrollbar-thumb:hover {
+    background-color: #a0a0a0;
+}
+
+/* Firefox scrollbar for task details */
+.task-details-container {
+    scrollbar-width: thin;
+    scrollbar-color: #d0d0d0 #f1f1f1;
+}
+
 .task-type-tag.offer-type-cpi {
     background-color: #0d6efd;
     color: #ffffff;
@@ -322,6 +354,17 @@ body .navbar + .full-width-container {
     
     .task-description {
         font-size: 0.9rem;
+    }
+    
+    /* Adjust modal details container for mobile */
+    .task-details-container {
+        max-height: 65vh; /* Lower height for mobile to allow more space for browser UI */
+        padding-right: 2px; /* Less padding on mobile */
+    }
+    
+    /* Make modal body padding smaller on mobile */
+    .modal-body {
+        padding: 0.75rem;
     }
 }
 
