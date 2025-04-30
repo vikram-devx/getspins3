@@ -1818,6 +1818,7 @@ body .navbar + .full-width-container {
 
 .dashboard-slides {
     width: 100%;
+    min-height: 200px; /* Set a minimum height for the slides container */
     position: relative;
     overflow: hidden;
     margin: 0;
@@ -1829,17 +1830,20 @@ body .navbar + .full-width-container {
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
+    min-height: 200px; /* Set a minimum height for each slide */
     position: absolute;
     top: 0;
     left: 0;
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
     padding: 0;
     box-sizing: border-box;
 }
 
 .dashboard-slide.active {
     opacity: 1;
+    visibility: visible;
     z-index: 2;
 }
 
@@ -1890,19 +1894,7 @@ body .navbar + .full-width-container {
     display: none; /* Chrome, Safari, Opera */
 }
 
-.dashboard-slide {
-    flex: 0 0 100%; /* Each slide takes full width */
-    width: 100%;
-    min-width: 100%;
-    position: relative;
-    box-sizing: border-box;
-    padding: 0.25rem;
-    opacity: 1 !important; /* Ensure all slides are fully visible */
-    visibility: visible !important; /* Make sure slides are visible */
-    display: block; /* Ensure display is always block */
-    z-index: 1; /* Make sure slide is positioned correctly in stacking context */
-    margin: 0;
-}
+/* Removed conflicting styles that forced all slides to be visible */
 
 .dashboard-slide-content {
     padding: 1.25rem;
@@ -2045,6 +2037,7 @@ body .navbar + .full-width-container {
         max-width: 100%;
         flex: 0 0 100%;
         margin-right: 0;
+        /* Do not override the visibility properties from the main rule */
     }
 }
 
@@ -2413,6 +2406,7 @@ body .navbar + .full-width-container {
         max-width: 100%;
         flex: 0 0 100%;
         margin-right: 0; /* No margin between slides */
+        /* Visibility and opacity should be controlled by active class only */
     }
 }
 
