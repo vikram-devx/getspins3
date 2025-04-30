@@ -357,17 +357,16 @@ function getOffers($ip = null, $user_agent = null, $offer_type = null, $max = nu
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
     }
     
-    // Setup API request data
+    // Setup API request data - according to OGAds documentation 
+    // we only need to send IP and user_agent, the API handles geolocation
     $data = [
         'ip' => $ip,                   // Client IP (REQUIRED)
         'user_agent' => $user_agent,   // Client User Agent (REQUIRED)
     ];
     
-    // Add country parameter if provided
-    if ($country) {
-        $data['country'] = $country;
-        error_log("Filtering offers by country: " . $country);
-    }
+    // We no longer send country parameter as it's causing "Unable to find geo data for IP" errors
+    // The API will determine the country based on the IP address
+    error_log("Relying on OGAds API for geolocation from IP: " . $ip);
     
     // Use settings from database if available
     if (!$offer_type && isset($settings['ogads_ctype']) && !empty($settings['ogads_ctype'])) {
@@ -504,23 +503,16 @@ function getOfferDetails($offer_id) {
         error_log("Private/local IP detected: " . $ip . " - Using actual IP for offer details request");
     }
     
-    // Get user's country and add it to the request
-    $country = detectUserCountry();
-    if ($country) {
-        error_log("Adding detected country to offer details request: " . $country);
-    }
-    
     // For v2 API, we need to use GET method as POST is not supported
+    // According to the API documentation, we only need to send IP and user_agent
+    // The API will handle geolocation
     $data = [
         'offer_id' => $offer_id,
         'ip' => $ip,
         'user_agent' => $_SERVER['HTTP_USER_AGENT']
     ];
     
-    // Add country parameter if detected
-    if ($country) {
-        $data['country'] = $country;
-    }
+    error_log("Relying on OGAds API for geolocation from IP: " . $ip);
     
     // Set up cURL with GET method
     $ch = curl_init();
