@@ -21,10 +21,11 @@ function detectUserCountry() {
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
     }
     
-    // For localhost or invalid IPs, use a public Indian IP for geolocation
+    // Check if we have a valid IP
     if (empty($ip) || $ip == '127.0.0.1' || $ip == '::1') {
-        $ip = '103.48.198.141'; // Public IP from India 
-        error_log("Local/invalid IP detected. Using Indian IP for country detection: " . $ip);
+        // Use the default country instead of a hardcoded IP
+        error_log("Local/invalid IP detected. Using default country: " . $default_country);
+        return $default_country;
     }
     
     // Try to get country using free IP geolocation service
@@ -334,9 +335,9 @@ function getOffers($ip = null, $user_agent = null, $offer_type = null, $max = nu
         
         // Check if the IP is a private/local IP address
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
-            // This is a private/local IP, use a public Indian IP for development/testing
-            $ip = '103.48.198.141'; // Public IP from India
-            error_log("Private/local IP detected. Using public Indian IP for API request: " . $ip);
+            // This is a private/local IP, just log it but use it as-is
+            // The OGAds API will handle geolocation based on their own logic
+            error_log("Private/local IP detected: " . $ip . " - Using actual IP for API request");
         }
     }
     
@@ -498,9 +499,9 @@ function getOfferDetails($offer_id) {
     
     // Check if the IP is a private/local IP address
     if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
-        // This is a private/local IP, use a public Indian IP for development/testing
-        $ip = '103.48.198.141'; // Public IP from India
-        error_log("Private/local IP detected. Using public Indian IP for offer details: " . $ip);
+        // This is a private/local IP, just log it but use it as-is
+        // Let the OGAds API handle geolocation based on their own logic
+        error_log("Private/local IP detected: " . $ip . " - Using actual IP for offer details request");
     }
     
     // Get user's country and add it to the request
