@@ -357,16 +357,22 @@ function getOffers($ip = null, $user_agent = null, $offer_type = null, $max = nu
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
     }
     
-    // Setup API request data - according to OGAds documentation 
-    // we only need to send IP and user_agent, the API handles geolocation
+    // Setup API request data
     $data = [
         'ip' => $ip,                   // Client IP (REQUIRED)
         'user_agent' => $user_agent,   // Client User Agent (REQUIRED)
     ];
     
-    // We no longer send country parameter as it's causing "Unable to find geo data for IP" errors
-    // The API will determine the country based on the IP address
-    error_log("Relying on OGAds API for geolocation from IP: " . $ip);
+    // When the IP is from a mobile network (which often causes "Unable to find geo data for IP"),
+    // explicitly set the country to 'IN' for India
+    // Check if the IP is a mobile/private IP (starting with 10., 172., 192., etc.)
+    if (preg_match('/^(10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.)/', $ip)) {
+        $data['country'] = 'IN'; // Force country to India for these IPs
+        error_log("Mobile/Private IP detected: $ip - Using fallback country: IN");
+    } else {
+        // Otherwise let the API determine country
+        error_log("Using standard IP for geolocation: $ip");
+    }
     
     // Use settings from database if available
     if (!$offer_type && isset($settings['ogads_ctype']) && !empty($settings['ogads_ctype'])) {
@@ -496,23 +502,23 @@ function getOfferDetails($offer_id) {
     // Get the IP address
     $ip = $_SERVER['REMOTE_ADDR'];
     
-    // Check if the IP is a private/local IP address
-    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
-        // This is a private/local IP, just log it but use it as-is
-        // Let the OGAds API handle geolocation based on their own logic
-        error_log("Private/local IP detected: " . $ip . " - Using actual IP for offer details request");
-    }
-    
     // For v2 API, we need to use GET method as POST is not supported
-    // According to the API documentation, we only need to send IP and user_agent
-    // The API will handle geolocation
     $data = [
         'offer_id' => $offer_id,
         'ip' => $ip,
         'user_agent' => $_SERVER['HTTP_USER_AGENT']
     ];
     
-    error_log("Relying on OGAds API for geolocation from IP: " . $ip);
+    // When the IP is from a mobile network (which often causes "Unable to find geo data for IP"),
+    // explicitly set the country to 'IN' for India
+    // Check if the IP is a mobile/private IP (starting with 10., 172., 192., etc.)
+    if (preg_match('/^(10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.)/', $ip)) {
+        $data['country'] = 'IN'; // Force country to India for these IPs
+        error_log("Mobile/Private IP detected: $ip - Using fallback country: IN for offer details");
+    } else {
+        // Otherwise let the API determine country
+        error_log("Using standard IP for geolocation in offer details: $ip");
+    }
     
     // Set up cURL with GET method
     $ch = curl_init();
