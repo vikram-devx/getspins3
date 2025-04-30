@@ -297,6 +297,9 @@ if ($offers_result['status'] === 'success') {
     
     // Don't use sample offers for production
     $use_sample_offers = false;
+    
+    // Store debug info for display
+    $debug_info = "Detected Country: " . ($user_country ?: 'Unknown') . " | IP: " . $_SERVER['REMOTE_ADDR'] . " | Device: " . $device_type;
 }
 
 // Initialize $offers as an empty array if it's not set
@@ -481,19 +484,28 @@ include 'includes/header.php';
             <div class="card-body">
                 <?php if ($message): ?>
                 <div class="alert alert-<?php echo $message_type; ?>"><?php echo $message; ?></div>
-                <?php endif; ?>
                 
-                <?php 
-                // Debug information - Show only when debugging is enabled
-                $show_debug_info = defined('SHOW_DEBUG_INFO') ? SHOW_DEBUG_INFO : false;
-                if ($show_debug_info): 
-                ?>
+                <?php if (strpos($message, 'API Error') !== false): ?>
+                <!-- Always show debug info when API error occurs, to help users provide information for support -->
                 <div class="alert alert-info mb-3">
                     <strong>Debug Info:</strong> Detected Country: <?php echo htmlspecialchars($user_country); ?> | 
                     IP: <?php echo htmlspecialchars($_SERVER['REMOTE_ADDR']); ?> | 
                     Device: <?php echo htmlspecialchars($device_type); ?>
                 </div>
                 <?php endif; ?>
+                <?php endif; ?>
+                
+                <?php 
+                // Debug information - Show only when debugging is enabled (even if no error)
+                $show_debug_info = defined('SHOW_DEBUG_INFO') ? SHOW_DEBUG_INFO : false;
+                if ($show_debug_info && !isset($debug_info_displayed)): 
+                ?>
+                <div class="alert alert-info mb-3">
+                    <strong>Debug Info:</strong> Detected Country: <?php echo htmlspecialchars($user_country); ?> | 
+                    IP: <?php echo htmlspecialchars($_SERVER['REMOTE_ADDR']); ?> | 
+                    Device: <?php echo htmlspecialchars($device_type); ?>
+                </div>
+                <?php $debug_info_displayed = true; endif; ?>
                 
                 <?php if (empty($offers)): ?>
                 <div class="alert alert-info">

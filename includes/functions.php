@@ -453,6 +453,79 @@ function getOffers($ip = null, $user_agent = null, $offer_type = null, $max = nu
             'offers' => $data
         ];
     } else if (isset($data['error']) && !empty($data['error'])) {
+        // Special handling for "Unable to find geo data for IP" error
+        if (strpos($data['error'], 'Unable to find geo data for IP') !== false) {
+            error_log("OGAds API couldn't find geo data for IP. Retrying with explicit country from IP-API.");
+            
+            // Get detected country using our own method
+            $detected_country = detectUserCountry();
+            
+            if ($detected_country) {
+                // Remove any country parameter that might already be in the data array
+                if (isset($data['country'])) {
+                    unset($data['country']);
+                }
+                
+                // Create a new request with explicit country parameter
+                $retry_data = $data;
+                $retry_data['country'] = $detected_country;
+                
+                error_log("Retrying OGAds API request with explicit country: " . $detected_country);
+                
+                // Log the retry API request parameters for debugging
+                error_log("OGAds API Retry Parameters: " . print_r($retry_data, true));
+                
+                // Set up cURL with GET method for retry
+                $retry_ch = curl_init();
+                
+                // Create query string for GET request
+                $retry_query_params = http_build_query($retry_data);
+                $retry_url = $api_url . '?' . $retry_query_params;
+                
+                // Set CURL options for GET request
+                curl_setopt_array($retry_ch, [
+                    CURLOPT_URL            => $retry_url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_HTTPHEADER     => [
+                        'Authorization: Bearer ' . $api_key,
+                        'Accept: application/json'
+                    ],
+                    CURLOPT_SSL_VERIFYPEER => true,
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_TIMEOUT        => 30,
+                ]);
+                
+                // Execute retry cURL request
+                $retry_response = curl_exec($retry_ch);
+                
+                // Check for errors in retry
+                if (curl_errno($retry_ch)) {
+                    $retry_error = curl_error($retry_ch);
+                    curl_close($retry_ch);
+                    error_log("Retry API Request Error: " . $retry_error);
+                } else {
+                    curl_close($retry_ch);
+                    
+                    // Decode JSON response from retry
+                    $retry_data = json_decode($retry_response, true);
+                    
+                    // Check if retry response is valid
+                    if ($retry_data && json_last_error() === JSON_ERROR_NONE) {
+                        error_log("Retry API Response: " . print_r($retry_data, true));
+                        
+                        if (isset($retry_data['success']) && $retry_data['success'] === true) {
+                            error_log("Successfully retrieved offers with explicit country parameter");
+                            return [
+                                'status' => 'success',
+                                'offers' => $retry_data
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        
+        // If we got here, the retry failed or wasn't attempted
         return [
             'status' => 'error',
             'message' => 'API Error: ' . $data['error']
@@ -567,6 +640,88 @@ function getOfferDetails($offer_id) {
         ];
     }
     
+    // Check if the API response indicates success
+    if (isset($data['success']) && $data['success'] === true) {
+        return [
+            'status' => 'success',
+            'offer' => $data
+        ];
+    } else if (isset($data['error']) && !empty($data['error'])) {
+        // Special handling for "Unable to find geo data for IP" error
+        if (strpos($data['error'], 'Unable to find geo data for IP') !== false) {
+            error_log("OGAds API couldn't find geo data for IP in offer details. Retrying with explicit country from IP-API.");
+            
+            // Get detected country using our own method
+            $detected_country = detectUserCountry();
+            
+            if ($detected_country) {
+                // Remove any country parameter that might already be in the data array
+                if (isset($data['country'])) {
+                    unset($data['country']);
+                }
+                
+                // Create a new request with explicit country parameter
+                $retry_data = $data;
+                $retry_data['country'] = $detected_country;
+                
+                error_log("Retrying OGAds API offer details request with explicit country: " . $detected_country);
+                
+                // Set up cURL with GET method for retry
+                $retry_ch = curl_init();
+                
+                // Create query string for GET request
+                $retry_query_params = http_build_query($retry_data);
+                $retry_url = $api_url . '?' . $retry_query_params;
+                
+                // Set CURL options for GET request
+                curl_setopt_array($retry_ch, [
+                    CURLOPT_URL            => $retry_url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_HTTPHEADER     => [
+                        'Authorization: Bearer ' . $api_key,
+                        'Accept: application/json'
+                    ],
+                    CURLOPT_SSL_VERIFYPEER => true,
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_TIMEOUT        => 30,
+                ]);
+                
+                // Execute retry cURL request
+                $retry_response = curl_exec($retry_ch);
+                
+                // Check for errors in retry
+                if (curl_errno($retry_ch)) {
+                    $retry_error = curl_error($retry_ch);
+                    curl_close($retry_ch);
+                    error_log("Retry API Offer Details Request Error: " . $retry_error);
+                } else {
+                    curl_close($retry_ch);
+                    
+                    // Decode JSON response from retry
+                    $retry_data = json_decode($retry_response, true);
+                    
+                    // Check if retry response is valid
+                    if ($retry_data && json_last_error() === JSON_ERROR_NONE) {
+                        if (isset($retry_data['success']) && $retry_data['success'] === true) {
+                            error_log("Successfully retrieved offer details with explicit country parameter");
+                            return [
+                                'status' => 'success',
+                                'offer' => $retry_data
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        
+        // If we got here, the retry failed or wasn't attempted
+        return [
+            'status' => 'error',
+            'message' => 'API Error: ' . $data['error']
+        ];
+    }
+    
+    // Default case - return whatever we got
     return [
         'status' => 'success',
         'offer' => $data
